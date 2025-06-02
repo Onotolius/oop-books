@@ -1,9 +1,10 @@
 <?php
-echo "src/Views/index.php" ;
+echo "src/Views/index.php";
 /**
- *@var array $data
+ * @var array $data
  */
 // Выше штука чтобы редактор видел что я кинул данные во вью
+dump($data);
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,8 +20,11 @@ echo "src/Views/index.php" ;
 <h2>Список книг: </h2>
 <ul>
     <?php foreach ($data as $key => $book): ?>
-        <li><b><?= $book['title'] ?></b> by <i><?= $book['author'] ?></i></li>
-    <?php endforeach;?>
+        <li><b><?= $book['title'] ?></b> by <i><?= $book['author'] ?></i>
+            <a href="/delete?id=<?= $book['id'] ?>">Delete book</a>
+        </li>
+    <?php endforeach; ?>
 </ul>
+<h2><a href="/add">Создать запись!</a></h2>
 </body>
 </html>

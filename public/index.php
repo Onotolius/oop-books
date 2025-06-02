@@ -3,19 +3,29 @@
 declare(strict_types=1);
 
 require __DIR__ . "/../vendor/autoload.php";
+
 use App\Models\Book;
 use App\Models\Library;
+use App\Core\Route;
+use App\Core\Router;
+use App\Core\DB;
 
-$book1 = new Book('Мертвые души', 'Гоголь', '1849', 'Роман');
-$book2 = new Book('Братья Карамазовы', 'Достоевский', '1890', 'Роман');
-$book3 = new Book('Crime and Punishment', 'Достоевский', '1890', 'Роман');
-$book4 = new Book('War and Peace', 'Tolstoy', '1850', 'Роман');
-$book5 = new Book('Clean Code', 'R. Martin', '1980', 'science');
-$myLib = new Library();
-$myLib->addBook($book1);
-$myLib->addBook($book2);
-$myLib->addBook($book3);
-$myLib->addBook($book4);
-$myLib->addBook($book5);
-$controller = new \App\Controllers\LibraryController($myLib);
-$controller->index();
+$config = require __DIR__ . "/../src/config/db-connection.php";
+
+try {
+    $pdo = new \PDO($config['dsn'], $config['username'], $config['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    echo "We connected";
+} catch (Exception $e) {
+    echo "Something went wrong... {$e->getMessage()}";
+}
+
+$db = new DB($pdo);
+Route::get("/", [\App\Controllers\LibraryController::class, 'index']);
+Route::get("/add", [\App\Controllers\LibraryController::class, 'addForm']);
+Route::post("/store", [\App\Controllers\LibraryController::class, 'store']);
+Route::get("/delete", [\App\Controllers\LibraryController::class, 'delete']);
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+$library = new Library($db);
+$router = new Router(Route::getRoutes(), $library);
+$router->dispatch($uri, $method);
