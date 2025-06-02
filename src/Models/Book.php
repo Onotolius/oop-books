@@ -1,6 +1,6 @@
 <?php
 
-namespace App\src\Models;
+namespace App\Models;
 class Book
 {
     private string $title;
@@ -66,8 +66,13 @@ class Book
         $this->genre = $genre;
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     public function getInfo(): string
     {
-        return "This is: {$this->getTitle()} by {$this->getAuthor()} written in {$this->getYear()}, genre: {$this->getGenre()}";
+        return "This is: {$this->getTitle()} by {$this->getAuthor()} written in {$this->getYear()}, genre: {$this->getGenre()} </br>";
     }
 }
