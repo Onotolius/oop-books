@@ -69,4 +69,19 @@ class Library
     {
        return json_encode($book); // Пока не в кусре
     }
+
+    public function getAll(): array
+    {
+        $books = [];
+        foreach($this->books as $key => $book){
+            $books[] = [
+                "id" => $book->getId(),
+                "title" => $book->getTitle(),
+                "author" => $book->getAuthor(),
+                "genre" => $book->getGenre(),
+                "year" => $book->getYear(),
+            ];
+        }
+        return $books;
+    }
 }

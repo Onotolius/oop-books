@@ -17,14 +17,5 @@ $myLib->addBook($book2);
 $myLib->addBook($book3);
 $myLib->addBook($book4);
 $myLib->addBook($book5);
-$myLib->findByAuthor('Достоевский'); // Работает четко и без лишних выводов ID
-echo "</br>";
-$myLib->findByGenre('роман'); // Работает отлично
-echo "</br>";
-$myLib->listBooks(); // само собой
-echo "</br>";
-$myLib->getBookById(3); // четко работает
-echo "</br>";
-$myLib->removeBookById(3); // тоже гуд
-echo "</br>";
-$myLib->listBooks(); // само собой
+$controller = new \App\Controllers\LibraryController($myLib);
+$controller->index();
