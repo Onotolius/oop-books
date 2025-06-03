@@ -51,9 +51,7 @@ class LibraryController
 
     public function addForm(): void
     {
-        $this->render('add', []); // тут просят кинуть через $data данные
-
-        // нужно будет сделать по-другому ф-цию
+        $this->render('add', []);
     }
 
     public function store(): void
