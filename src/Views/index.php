@@ -13,13 +13,13 @@
     <?php else: ?>
         <ul>
             <?php foreach ($data['books'] as $key => $book): ?>
-                <li><b><?= $book['title'] ?></b> by <i><?= $book['author'] ?></i>
-                    <a href="/delete?id=<?= $book['id'] ?>">Delete book</a>
+                <li><span><b><?= $book['title'] ?></b> by <i><?= $book['author'] ?></i></span>
+                    <a href="/delete?id=<?= $book['id'] ?>" class="delete">Удалить Книгу</a>
                 </li>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
-    <h2><a href="/add">Создать запись!</a></h2>
+    <h2><a href="/add" class="create_link">Создать запись!</a></h2>
     <section>
         <form method="GET" action="/" class="form">
             <label for="author">Автор:</label>
