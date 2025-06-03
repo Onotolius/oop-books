@@ -77,11 +77,6 @@ class Library
         return array_column($all, 'genre');
     }
 
-    public function saveToJson(Book $book)
-    {
-        return json_encode($book); // Пока не в кусре
-    }
-
     public function getAll(): array
     {
         return $this->db->select("SELECT * FROM books");
