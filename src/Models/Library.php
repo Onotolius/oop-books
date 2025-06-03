@@ -41,22 +41,40 @@ class Library
         echo $this->log("User request all books");
     }
 
-    public function findByAuthor(string $author): void
+    public function findByAuthor(string $author): array
     {
-        $this->db->select("SELECT * FROM books where author = ?", [$author]);
         echo $this->log("User made search by Author ");
+        return $this->db->select("SELECT * FROM books where author = ?", [$author]);
     }
 
-    public function findByGenre(string $genre): void
+    public function findByGenre(string $genre): array
     {
-        $this->db->select("SELECT * FROM books where genre = ?", [$genre]);
         echo $this->log("User made search by genre ");
+        return $this->db->select("SELECT * FROM books where genre = ?", [$genre]);
+    }
+
+    public function findByGenreAndAuthor(string $genre, string $author): array
+    {
+        echo $this->log("User made search by genre and author");
+        return $this->db->select("SELECT * FROM books WHERE genre = ? AND author = ?", [$genre, $author]);
     }
 
     public function getBookById(int $id): void
     {
         $this->db->select("SELECT * FROM books where id = ?", [$id]);
         echo $this->log("User made search by Id ");
+    }
+
+    public function getUniqueAuthors(): array
+    {
+        $all = $this->db->select("SELECT DISTINCT author FROM books");
+        return array_column($all, 'author');
+    }
+
+    public function getUniqueGenres(): array
+    {
+        $all = $this->db->select("SELECT DISTINCT genre FROM books");
+        return array_column($all, 'genre');
     }
 
     public function saveToJson(Book $book)

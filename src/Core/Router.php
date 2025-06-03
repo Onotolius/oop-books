@@ -2,8 +2,8 @@
 
 namespace App\Core;
 
-use App\Controllers\LibraryController;
 use App\Models\Library;
+use App\Controllers\ErrorController;
 
 class Router
 {
@@ -24,20 +24,20 @@ class Router
     public function dispatch(string $uri, string $method)
     {
         if (!isset($this->routes[$method][$uri])) {
-            echo "Route not found";
+            (new ErrorController())->notFound();
             return;
         }
         [$controller, $action] = $this->routes[$method][$uri];
 
         if (!class_exists($controller)) {
-            echo "Controller doesnt exist";
+            (new ErrorController())->notFound();
             return;
         }
 
         $controllerInstance = new $controller($this->library);
 
         if (!method_exists($controllerInstance, $action)) {
-            echo "Method doesnt exist";
+            (new ErrorController())->notFound();
         }
         $controllerInstance->$action();
     }

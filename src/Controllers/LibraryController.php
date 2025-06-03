@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Book;
 use App\Models\Library;
 use http\Header;
+use App\Controllers\ErrorController;
 
 class LibraryController
 {
@@ -30,7 +31,22 @@ class LibraryController
 
     public function index(): void
     {
-        $this->render('index', $this->library->getAll());
+        $author = $_GET['author'] ?? '';
+        $genre = $_GET['genre'] ?? '';
+        if ($author && $genre) {
+            $data = $this->library->findByGenreAndAuthor($genre, $author);
+        } elseif ($author) {
+            $data = $this->library->findByAuthor($author);
+        } elseif ($genre) {
+            $data = $this->library->findByGenre($genre);
+        } else {
+            $data = $this->library->getAll();
+        }
+        $this->render('index', [
+            "books" => $data,
+            "authors" => $this->library->getUniqueAuthors(),
+            "genres" => $this->library->getUniqueGenres(),
+        ]);
     }
 
     public function addForm(): void
@@ -42,11 +58,19 @@ class LibraryController
 
     public function store(): void
     {
-        $param = $_POST;
-        $book = new Book($param['title'], $param['author'], $param['year'], $param['genre']);
-        $this->add($book);
-        header("Location: /");
-        exit;
+        $title = trim(htmlspecialchars($_POST['title'])) ?? '';
+        $author = trim(htmlspecialchars($_POST['author'])) ?? '';
+        $genre = trim(htmlspecialchars($_POST['genre'])) ?? '';
+        if ($title === "" || $author === "" || $genre === "") {
+            http_response_code(422);
+            exit;
+        } else {
+            $book = new Book($title, $author, $_POST['year'], $genre);
+            $this->add($book);
+            header("Location: /");
+            exit;
+        }
+
     }
 
     public function render(string $view, array $data): void
